@@ -29,7 +29,7 @@ entries get stopped), average win much larger. Judge it on expectancy and
 Calmar over a long window, not win rate. Run it through walk-forward before
 trusting any parameter set.
 
-Duck-typed to the project's Strategy interface (.name, .on_bar).
+Duck-typed to the project's Strategy interface (.name, .params, .on_bar).
 """
 
 
@@ -45,6 +45,11 @@ class PyramidingBreakout:
         atr_window : ATR lookback.
         """
         self.symbols = list(symbols)
+        # Constructor args, as Strategy.__init__ records them; the backtest
+        # and walk-forward tools size their warmup from this.
+        self.params = dict(entry=entry, exit=exit, allow_short=allow_short,
+                           max_adds=max_adds, add_atr=add_atr,
+                           stop_atr=stop_atr, atr_window=atr_window)
         self.entry = entry
         self.exit = exit
         self.allow_short = allow_short

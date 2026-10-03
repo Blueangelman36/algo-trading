@@ -23,6 +23,29 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Everything compiles
         run: python -m compileall -q backtest data live research strategies webapp tools *.py
+      - name: Every strategy records its constructor params
+        # The backtest tools size warmup from strat.params; three duck-typed
+        # strategies once lacked it and crashed them.
+        run: |
+          python - <<'EOF'
+          import inspect
+          from strategies.breakout import Breakout
+          from strategies.mean_reversion import MeanReversion
+          from strategies.momentum import Momentum
+          from strategies.pairs import PairsTrading
+          from strategies.pyramiding_breakout import PyramidingBreakout
+          from strategies.xsec_momentum import CrossSectionalMomentum
+          bad = []
+          for cls in (MeanReversion, Momentum, PairsTrading, Breakout,
+                      PyramidingBreakout, CrossSectionalMomentum):
+              want = {n: p.default for n, p in inspect.signature(cls.__init__).parameters.items()
+                      if n not in ("self", "symbols")}
+              got = getattr(cls(["A", "B"] if cls is PairsTrading else ["A", "B", "C"]), "params", None)
+              if got != want:
+                  bad.append(f"{cls.__name__}: params={got!r}, constructor defaults={want!r}")
+          print("\n".join(bad) or "every strategy records its constructor params")
+          raise SystemExit(1 if bad else 0)
+          EOF
       - name: Backtest
         run: python run_backtest.py --synthetic --strategy meanrev
       - name: Pair screener

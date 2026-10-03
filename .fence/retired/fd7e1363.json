@@ -25,5 +25,7 @@
       "rival": 0.10606060606060606,
       "tokens": ["BacktestEngine", "(", "strat", ",", "data", ",", "portfolio", "=", "pf", ",", "max_gross_per_symbol", "=", "1.0", "/", "len", "(", "symbols", ")", ",", "warmup", "=", "WF", ".", "_warmup_for", "(", "params", ")", ",", "fill_mode", "=", "\"next_open\"", "if", "next_open", "else", "\"close\"", ")", ".", "run", "(", ")"]
     }
-  }
+  },
+  "retired": "2026-10-03",
+  "retired_because": "Breakout, PyramidingBreakout and CrossSectionalMomentum now record .params (CI checks every strategy does), so the crash this guarded against is gone. Warmup from the passed params is still correct and equivalent."
 }

@@ -14,7 +14,7 @@ Expectations to set BEFORE running it: win rate around 30-45% with a fat
 right tail is normal and healthy. If you judge it by win rate you'll turn
 it off right before it works.
 
-Duck-typed to the project's Strategy interface (.name, .on_bar).
+Duck-typed to the project's Strategy interface (.name, .params, .on_bar).
 """
 
 
@@ -25,6 +25,9 @@ class Breakout:
         exit  : channel length for exits; shorter than entry by design.
         """
         self.symbols = list(symbols)
+        # Constructor args, as Strategy.__init__ records them; the backtest
+        # and walk-forward tools size their warmup from this.
+        self.params = dict(entry=entry, exit=exit, allow_short=allow_short)
         self.entry = entry
         self.exit = exit
         self.allow_short = allow_short

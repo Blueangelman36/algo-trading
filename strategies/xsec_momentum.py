@@ -18,7 +18,7 @@ Practical notes:
     5-symbol universe and max_gross_per_symbol=1/5, each winner gets 20% of
     equity — set max_gross_per_symbol to taste.
 
-Duck-typed to the project's Strategy interface: exposes .name and
+Duck-typed to the project's Strategy interface: exposes .name, .params and
 .on_bar(ctx) -> {symbol: weight}, so it plugs into the backtest engine,
 walk-forward harness, and live trader unchanged.
 """
@@ -36,6 +36,10 @@ class CrossSectionalMomentum:
         rebalance: re-rank every this many bars; hold weights in between.
         """
         self.symbols = list(symbols)
+        # Constructor args, as Strategy.__init__ records them; the backtest
+        # and walk-forward tools size their warmup from this.
+        self.params = dict(lookback=lookback, skip=skip, n_long=n_long,
+                           n_short=n_short, rebalance=rebalance)
         self.lookback = lookback
         self.skip = skip
         self.n_long = n_long

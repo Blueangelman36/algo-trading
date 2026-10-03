@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/Blueangelman36/algo-trading/actions/workflows/ci.yml/badge.svg)](https://github.com/Blueangelman36/algo-trading/actions/workflows/ci.yml)
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Blueangelman36/algo-trading)
+[![Live demo](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://algo-trading-lffyuatmhfnegfyudgmjqo.streamlit.app/)
 
 A systematic trading framework with three pieces that share the same strategy code:
 
@@ -12,9 +13,11 @@ A systematic trading framework with three pieces that share the same strategy co
 
 > **Try it without installing anything:** click *Open in GitHub Codespaces* above,
 > wait for the terminal, and run `python run_backtest.py --synthetic --strategy meanrev`.
-> Or use the browser demo below.
+> Or open the **[live research demo](https://algo-trading-lffyuatmhfnegfyudgmjqo.streamlit.app/)** in your browser.
 
 ### Research demo (browser)
+
+**Live:** https://algo-trading-lffyuatmhfnegfyudgmjqo.streamlit.app/
 
 `demo/streamlit_app.py` puts the research tools in a web page: backtest any
 strategy, screen a basket for cointegrated pairs, run a walk-forward test, and
@@ -27,9 +30,9 @@ pip install -r demo/requirements.txt
 streamlit run demo/streamlit_app.py
 ```
 
-To host your own copy for free on Streamlit Community Cloud: sign in at
-share.streamlit.io with GitHub, choose **Create app**, then pick this
-repository, branch `main` and file path `demo/streamlit_app.py`. Under
+To host your own copy (from a fork, say) for free on Streamlit Community
+Cloud: sign in at share.streamlit.io with GitHub, choose **Create app**, then
+pick the repository, branch `main` and file path `demo/streamlit_app.py`. Under
 **Advanced settings** keep Python 3.12 <!-- asof:python-version -->, the
 version CI tests.
 
