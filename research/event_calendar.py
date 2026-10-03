@@ -13,7 +13,9 @@ Events covered:
       when a federal holiday falls earlier in the report week (see below).
   Baker Hughes Rig Count — Fridays 13:00 ET. Milder, but a real mover.
   OPEC / OPEC+ meetings — irregular; supplied as explicit dates (see OPEC_DATES).
-      Update these from opec.org; they're announced well in advance.
+      Update these from opec.org press releases. Each monthly meeting
+      announces only the next one, about a month ahead; each OPEC and
+      non-OPEC Ministerial Meeting sets the next ministerial ~6 months out.
   EIA Natural Gas Storage — Thursdays 10:30 ET (matters for NG, not crude).
 
 All times are US/Eastern internally and compared in UTC, so this behaves
@@ -45,10 +47,20 @@ NATGAS_SYMBOLS = {"UNG", "BOIL", "KOLD", "NG", "NG=F"}
 
 # OPEC / OPEC+ ministerial meeting dates. UPDATE THESE — see module docstring.
 # Format: YYYY-MM-DD. Treated as all-day high-risk events.
+# Checked against opec.org press releases on 2026-10-03:
+#   - 2026-01-04 .. 2026-10-04: monthly meetings of the participating
+#     countries (eight, seven since the UAE's exit), each announced by the
+#     one before; JMMCs (1 Feb, 5 Apr, 7 Jun) and the 41st ONOMM (7 Jun)
+#     fell on the same days.
+#   - 2026-11-01: EXPECTED, not yet announced. Every 2026 meeting so far was
+#     on the first Sunday of the month; the 4 October release should confirm.
+#   - 2026-11-29: the 42nd OPEC and non-OPEC Ministerial Meeting, set by the
+#     41st. Expect it to set the 2027 schedule.
 OPEC_DATES = [
-    "2026-02-01", "2026-03-01", "2026-04-05", "2026-05-03",
-    "2026-06-07", "2026-07-05", "2026-08-02", "2026-09-06",
-    "2026-10-04", "2026-11-01", "2026-11-29",  # asof:opec-last
+    "2026-01-04", "2026-02-01", "2026-03-01", "2026-04-05",
+    "2026-05-03", "2026-06-07", "2026-07-05", "2026-08-02",
+    "2026-09-06", "2026-10-04", "2026-11-01",
+    "2026-11-29",  # asof:opec-last
 ]
 
 # US federal holidays (observed dates), 2026-2027. Any of these landing on
