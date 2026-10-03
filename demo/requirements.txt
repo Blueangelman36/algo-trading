@@ -1,0 +1,9 @@
+# What Streamlit Community Cloud installs for the demo. It reads this file,
+# not the root requirements.txt, because it sits next to the entrypoint:
+# the demo never trades, so it skips the brokerage clients and Flask.
+streamlit>=1.50
+altair>=5
+numpy>=1.26
+pandas>=2.0
+yfinance>=0.2.40
+statsmodels>=0.14

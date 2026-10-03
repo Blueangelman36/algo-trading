@@ -3,7 +3,10 @@
 {
   "name": "algo-trading",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
-  "postCreateCommand": "pip install -r requirements-dev.txt && fence init",
+  "postCreateCommand": "pip install -r requirements-dev.txt -r demo/requirements.txt && fence init",
+  // streamlit run demo/streamlit_app.py
+  "forwardPorts": [8501],
+  "portsAttributes": { "8501": { "label": "Research demo" } },
   "customizations": {
     "vscode": {
       "extensions": ["ms-python.python"]

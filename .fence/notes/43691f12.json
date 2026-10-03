@@ -1,0 +1,29 @@
+{
+  "id": "43691f12",
+  "reason": "Streamlit puts the script's own folder (demo/) on sys.path, not the repository root, so without this the backtest/, data/, research/ and strategies/ imports fail on Streamlit Community Cloud.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "sys.path.insert(0, str(ROOT))",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "demo/streamlit_app.py",
+      "scope": "",
+      "kind": "Expr.Call",
+      "line": 25,
+      "exact": "833b892425e36de2",
+      "shape": "212cc31abae3095c",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.1935483870967742,
+      "tokens": ["sys", ".", "path", ".", "insert", "(", "0", ",", "str", "(", "ROOT", ")", ")"]
+    }
+  }
+}

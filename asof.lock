@@ -69,10 +69,11 @@
       ]
     },
     "journal-lines": {
-      "value": "\"200\"",
-      "checked": "2026-10-03T20:42:56Z",
+      "value": "200",
+      "checked": "2026-10-03T20:45:49Z",
       "source": "run",
       "files": [
+        ".fence/notes/2e4cfce1.json",
         "webapp/app.py"
       ]
     },

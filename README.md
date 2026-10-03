@@ -12,6 +12,26 @@ A systematic trading framework with three pieces that share the same strategy co
 
 > **Try it without installing anything:** click *Open in GitHub Codespaces* above,
 > wait for the terminal, and run `python run_backtest.py --synthetic --strategy meanrev`.
+> Or use the browser demo below.
+
+### Research demo (browser)
+
+`demo/streamlit_app.py` puts the research tools in a web page: backtest any
+strategy, screen a basket for cointegrated pairs, run a walk-forward test, and
+model an options version, on synthetic data or real Yahoo Finance prices. It
+imports the same modules as the command-line tools, and it never connects to a
+broker or places an order.
+
+```powershell
+pip install -r demo/requirements.txt
+streamlit run demo/streamlit_app.py
+```
+
+To host your own copy for free on Streamlit Community Cloud: sign in at
+share.streamlit.io with GitHub, choose **Create app**, then pick this
+repository, branch `main` and file path `demo/streamlit_app.py`. Under
+**Advanced settings** keep Python 3.12 <!-- asof:python-version -->, the
+version CI tests.
 
 The design rule: a strategy emits **target weights** (`+1` long, `0` flat, `-1` short)
 per symbol. The engine — backtest *or* live — turns those into orders. So the exact
@@ -262,6 +282,7 @@ algo-trading/
   webapp/                # Flask dashboard (WEB_DASHBOARD.md)
   deploy/                # systemd unit + sudoers rule for the dashboard
   tools/claims.py        # reads documented numbers from the code, for asof
+  demo/                  # Streamlit research demo (browser)
 ```
 \* These two need `data/news.py` (the Alpaca news client), which is not in this
 repository yet.

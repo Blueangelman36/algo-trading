@@ -1,0 +1,29 @@
+{
+  "id": "fd7e1363",
+  "reason": "Warmup comes from the params passed in, not strat.params: Breakout, PyramidingBreakout and CrossSectionalMomentum never call super().__init__ with their params, so .params does not exist on them and the backtest crashes for those three. backtest/walkforward.py sizes warmup the same way.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "BacktestEngine(strat, data, portfolio=pf,\n               max_gross_per_symbol=1.0 / len(symbols),\n               warmup=WF._warmup_for(params),\n               fill_mode=\"next_open\" if next_open else \"close\").run()",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "demo/streamlit_app.py",
+      "scope": "",
+      "kind": "Expr.Call",
+      "line": 309,
+      "exact": "4cb72ebb1224212a",
+      "shape": "17fc960cd5ea288e",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.10606060606060606,
+      "tokens": ["BacktestEngine", "(", "strat", ",", "data", ",", "portfolio", "=", "pf", ",", "max_gross_per_symbol", "=", "1.0", "/", "len", "(", "symbols", ")", ",", "warmup", "=", "WF", ".", "_warmup_for", "(", "params", ")", ",", "fill_mode", "=", "\"next_open\"", "if", "next_open", "else", "\"close\"", ")", ".", "run", "(", ")"]
+    }
+  }
+}

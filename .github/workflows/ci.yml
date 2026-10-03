@@ -32,6 +32,19 @@ jobs:
       - name: Options backtest
         run: python run_options_backtest.py --synthetic --strategy momentum
 
+  demo:
+    # The Streamlit research demo, installed the way Community Cloud installs
+    # it (demo/requirements.txt), with every tab run on synthetic data.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"  # asof:python-version
+          cache: pip
+      - run: pip install -r demo/requirements.txt
+      - run: python demo/smoke_test.py
+
   claims:
     # The numbers in the docs, checked against the code that decides them.
     # Overdue hand-checked numbers are a weekly reminder instead

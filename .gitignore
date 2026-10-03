@@ -23,3 +23,6 @@ asof.html
 
 # An older copy of the project, kept locally only
 /algo-trading/
+
+# Local preview config (points at a machine-specific venv)
+.claude/launch.json
