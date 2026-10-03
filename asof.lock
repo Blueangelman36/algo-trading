@@ -51,6 +51,14 @@
         "CLOUD_DEPLOYMENT.md"
       ]
     },
+    "holiday-lists-last": {
+      "value": "\"2027-12-24\"",
+      "checked": "2026-10-03T21:51:39Z",
+      "source": "manual",
+      "files": [
+        "research/event_calendar.py"
+      ]
+    },
     "ibkr-paper-gateway-port": {
       "value": "4002",
       "checked": "2026-10-03T20:42:56Z",

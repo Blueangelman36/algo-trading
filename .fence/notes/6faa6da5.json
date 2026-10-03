@@ -1,0 +1,29 @@
+{
+  "id": "6faa6da5",
+  "reason": "OPEC+ meets on Sundays. Without this the OPEC window (08:00 ET +/- 4h on the meeting day) sits entirely inside the weekend and never blocks a stock or ETF trade: on 2 years of hourly USO the old version made 0 OPEC vetoes and opened into the first reaction after 2 meetings (Aug and Sep 2026, both losers).",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "if e.next_open is not None and self.opec_next_session:\n    end = e.next_open",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "research/event_calendar.py",
+      "scope": "EventCalendar.blackout",
+      "kind": "If",
+      "line": 273,
+      "exact": "5732d6b3504901e9",
+      "shape": "1b5aecef4aa990bf",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.24390243902439024,
+      "tokens": ["if", "e", ".", "next_open", "is", "not", "None", "and", "self", ".", "opec_next_session", ":", "end", "=", "e", ".", "next_open"]
+    }
+  }
+}

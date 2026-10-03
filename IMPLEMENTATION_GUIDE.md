@@ -432,7 +432,7 @@ Configs in `bots/` were never modified by the upgrade itself.
 | Catalysts panel missing | `research/__init__.py` missing: `touch ~/algo-trading/research/__init__.py` |
 | Red OPEC banner | `OPEC_DATES` exhausted — refresh from opec.org. Until then OPEC meetings are NOT covered. |
 | EDGAR 403 | `SEC_USER_AGENT` not set in that environment (`alpaca.env` for the service, `~/.bashrc` for your shell). |
-| Filter "never fires" | For USO: EIA is Wed ~10:30 ET (Thu on holiday weeks) + OPEC dates. Confirm wiring via the `Catalyst filters active:` startup line. |
+| Filter "never fires" | For USO: EIA is Wed ~10:30 ET (Thu on holiday weeks) + OPEC dates. OPEC+ meets on Sundays, so its veto fires at the next session's open (usually Mon 09:30-13:30 ET). Confirm wiring via the `Catalyst filters active:` startup line. |
 
 ---
 

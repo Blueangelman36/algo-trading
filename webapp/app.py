@@ -560,8 +560,13 @@ def api_events():
         import pandas as pd
         from research.event_calendar import events_between, stale_after
         now = pd.Timestamp.utcnow()
-        evs = events_between(now - pd.Timedelta(hours=6),
-                             now + pd.Timedelta(days=7))
+        # Look back far enough to keep a weekend OPEC meeting listed until its
+        # blackout ends at the next session, as the bots still observe it.
+        recent = now - pd.Timedelta(hours=6)
+        evs = [e for e in events_between(now - pd.Timedelta(days=5),
+                                         now + pd.Timedelta(days=7))
+               if e.when >= recent or (e.next_open is not None
+                                       and e.next_open >= recent)]
         stale = stale_after()
         return jsonify({
             "events": [{"name": e.name,

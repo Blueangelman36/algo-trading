@@ -30,6 +30,12 @@ FIXES vs previous version:
   - The stale-OPEC warning now actually fires: EventCalendar.blackout() prints
     a one-time warning when it's asked about a date beyond the last hardcoded
     OPEC meeting, instead of silently pretending there are no meetings.
+  - Weekend OPEC meetings now black out the next session's open. OPEC+ meets
+    on Sundays, and the old window (08:00 ET +/- 4h on the meeting day) fell
+    entirely inside the weekend, so it never blocked a stock or ETF trade:
+    the bot could open a position straight into Monday's reaction. When the
+    market is closed on the meeting day, the blackout now runs on until
+    opec_after_min past the first NYSE session's open (see NYSE_HOLIDAYS).
 
 IMPORTANT: OPEC dates are a hardcoded list and WILL go stale. Anything past the
 list simply isn't covered — refresh OPEC_DATES from opec.org periodically.
@@ -73,7 +79,20 @@ US_FEDERAL_HOLIDAYS = [
     # 2027
     "2027-01-01", "2027-01-18", "2027-02-15", "2027-05-31", "2027-06-18",
     "2027-07-05", "2027-09-06", "2027-10-11", "2027-11-11", "2027-11-25",
-    "2027-12-24",
+    "2027-12-24",  # asof:holiday-lists-last
+]
+
+# NYSE full-day closures, 2026-2027, from nyse.com. Not the federal list:
+# NYSE trades through Columbus Day and Veterans Day but closes on Good Friday.
+# Used to find the first session after a weekend or holiday OPEC meeting.
+NYSE_HOLIDAYS = [
+    # 2026
+    "2026-01-01", "2026-01-19", "2026-02-16", "2026-04-03", "2026-05-25",
+    "2026-06-19", "2026-07-03", "2026-09-07", "2026-11-26", "2026-12-25",
+    # 2027
+    "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31",
+    "2027-06-18", "2027-07-05", "2027-09-06", "2027-11-25",
+    "2027-12-24",  # asof:holiday-lists-last
 ]
 
 
@@ -83,6 +102,9 @@ class Event:
     when: pd.Timestamp        # tz-aware, UTC
     symbols: set              # which instruments it affects; empty set = all
     severity: str             # 'high' | 'medium'
+    # For an event on a day the market is closed: 09:30 ET of the first NYSE
+    # session after it, when prices can first react. None otherwise.
+    next_open: pd.Timestamp | None = None
 
     def __repr__(self):
         return f"<{self.name} {self.when:%Y-%m-%d %H:%M %Z} ({self.severity})>"
@@ -95,6 +117,23 @@ def _et(d: date, t: time) -> pd.Timestamp:
 
 def _fed_holidays() -> set:
     return {pd.Timestamp(d).date() for d in US_FEDERAL_HOLIDAYS}
+
+
+def _nyse_holidays() -> set:
+    return {pd.Timestamp(d).date() for d in NYSE_HOLIDAYS}
+
+
+def is_trading_day(d: date) -> bool:
+    """True when NYSE has a regular session on `d`."""
+    return d.weekday() < 5 and d not in _nyse_holidays()
+
+
+def next_session_open(after: date) -> pd.Timestamp:
+    """09:30 ET on the first NYSE trading day after `after`, as UTC."""
+    d = after + timedelta(days=1)
+    while not is_trading_day(d):
+        d += timedelta(days=1)
+    return _et(d, time(9, 30))
 
 
 def eia_petroleum_day(week_of: date) -> date:
@@ -143,10 +182,15 @@ def events_between(start, end) -> list[Event]:
             out.append(Event("Baker Hughes Rig Count",
                              _et(day, time(13, 0)), set(CRUDE_SYMBOLS), "medium"))
 
-        # OPEC meetings: all-day, anchored at 08:00 ET
+        # OPEC meetings: all-day, anchored at 08:00 ET. Nearly all are on a
+        # Sunday, so also record when the market can first react.
         if day in opec:
-            out.append(Event("OPEC/OPEC+ Meeting",
-                             _et(day, time(8, 0)), set(CRUDE_SYMBOLS), "high"))
+            nxt = None if is_trading_day(day) else next_session_open(day)
+            name = "OPEC/OPEC+ Meeting"
+            if nxt is not None:
+                name += f" (market reacts {nxt.tz_convert(ET):%a %b %d %H:%M} ET)"
+            out.append(Event(name, _et(day, time(8, 0)), set(CRUDE_SYMBOLS),
+                             "high", next_open=nxt))
 
         day += timedelta(days=1)
 
@@ -168,23 +212,31 @@ class EventCalendar:
     deliberately asymmetric: a wide pre-event window (don't walk in), and a
     shorter post-event one (let the dust settle, then resume). OPEC (all-day)
     gets a much wider window.
+
+    opec_next_session: when an OPEC meeting falls on a day the market is
+    closed, keep the blackout going until opec_after_min past the next NYSE
+    session's open, so a bot can't open a position into the first reaction.
+    False restores the old meeting-day-only window (for A/B comparisons).
     """
 
     def __init__(self, before_min=60, after_min=45,
                  opec_before_min=240, opec_after_min=240,
-                 include_medium=False):
+                 include_medium=False, opec_next_session=True):
         self.before = before_min
         self.after = after_min
         self.opec_before = opec_before_min
         self.opec_after = opec_after_min
         self.include_medium = include_medium
+        self.opec_next_session = opec_next_session
         self._cache: dict[tuple, list[Event]] = {}
         self._stale_warned = False
 
     def _events_for_day(self, ts: pd.Timestamp) -> list[Event]:
         key = ts.tz_convert("UTC").date()
         if key not in self._cache:
-            lo = pd.Timestamp(key).tz_localize("UTC") - pd.Timedelta(days=1)
+            # Five days back: a weekend meeting before a holiday Monday still
+            # blacks out Tuesday's open, and the event must be in this list.
+            lo = pd.Timestamp(key).tz_localize("UTC") - pd.Timedelta(days=5)
             hi = pd.Timestamp(key).tz_localize("UTC") + pd.Timedelta(days=2)
             self._cache[key] = events_between(lo, hi)
         return self._cache[key]
@@ -217,7 +269,10 @@ class EventCalendar:
             else:
                 before, after = self.before, self.after
             lo = e.when - pd.Timedelta(minutes=before)
-            hi = e.when + pd.Timedelta(minutes=after)
+            end = e.when
+            if e.next_open is not None and self.opec_next_session:
+                end = e.next_open
+            hi = end + pd.Timedelta(minutes=after)
             if lo <= ts <= hi:
                 return True, f"{e.name} at {e.when:%Y-%m-%d %H:%M UTC}"
         return False, ""

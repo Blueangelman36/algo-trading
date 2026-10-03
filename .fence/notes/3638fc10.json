@@ -1,0 +1,29 @@
+{
+  "id": "3638fc10",
+  "reason": "Must reach back further than any weekend-plus-holiday gap. A meeting on Sunday 6 Sep 2026 blacks out Tuesday 8 Sep (Labor Day is Monday), and the blackout check only sees events in this cached range; with a 1-day lookback Tuesday's check would miss the meeting.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "lo = pd.Timestamp(key).tz_localize(\"UTC\") - pd.Timedelta(days=5)",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "research/event_calendar.py",
+      "scope": "EventCalendar._events_for_day",
+      "kind": "Assign",
+      "line": 239,
+      "exact": "45318a9dd8952973",
+      "shape": "a4be0d38690348ca",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.6190476190476191,
+      "tokens": ["lo", "=", "pd", ".", "Timestamp", "(", "key", ")", ".", "tz_localize", "(", "\"UTC\"", ")", "-", "pd", ".", "Timedelta", "(", "days", "=", "5", ")"]
+    }
+  }
+}

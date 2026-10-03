@@ -130,7 +130,9 @@ The dashboard makes the first three less tedious; it does not make the
 walk-forward gate optional.
 
 For USO specifically: `event_blackout` on (EIA/OPEC is the one that matters for
-oil), `earnings_blackout` off (ETFs have no earnings — it's a no-op).
+oil), `earnings_blackout` off (ETFs have no earnings — it's a no-op). OPEC+
+meets on Sundays, when the market is closed, so its blackout covers the first
+hours of the next session instead (usually Monday 09:30-13:30 ET).
 
 ---
 
