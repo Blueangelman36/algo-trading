@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% set active = 'logs' %}
+{% block body %}
+<h1>Logs</h1>
+<div class="sub">Last 200 lines from a bot's journal.</div>
+
+<div class="card">
+  {% for b in bots %}
+    <a href="{{ url_for('logs', name=b.name) }}">
+      <button type="button" class="{{ '' if selected==b.name else 'ghost' }}">{{ b.name }}</button>
+    </a>
+  {% else %}
+    <span style="color:#98a2b3">No bots configured yet.</span>
+  {% endfor %}
+</div>
+
+{% if selected %}
+<div class="card">
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:10px">
+    <span class="sub mono" style="margin:0">{{ selected }}</span>
+    <label class="check" style="margin-left:auto">
+      <input type="checkbox" id="follow" checked> Auto-refresh (5s)
+    </label>
+  </div>
+  <pre id="logout_pre">{{ output }}</pre>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if selected %}
+<script>
+const pre = document.getElementById('logout_pre');
+const follow = document.getElementById('follow');
+
+// Highlight the lines that matter: filter vetoes and risk halts.
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function paint(txt){
+  pre.innerHTML = txt.split('\n').map(line => {
+    const e = esc(line);
+    if (line.includes('VETO')) return `<span style="color:var(--warn)">${e}</span>`;
+    if (line.includes('RISK HALT') || line.includes('breached')) return `<span style="color:var(--bad)">${e}</span>`;
+    return e;
+  }).join('\n');
+}
+paint(pre.textContent);
+pre.scrollTop = pre.scrollHeight;
+
+setInterval(async () => {
+  if (!follow.checked) return;
+  try {
+    const r = await fetch("{{ url_for('logs', name=selected) }}?raw=1");
+    if (!r.ok) return;
+    const txt = await r.text();
+    const pinned = pre.scrollTop + pre.clientHeight >= pre.scrollHeight - 20;
+    paint(txt);
+    if (pinned) pre.scrollTop = pre.scrollHeight;
+  } catch (e) { /* transient */ }
+}, 5000);
+</script>
+{% endif %}
+{% endblock %}

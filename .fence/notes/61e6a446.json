@@ -1,0 +1,29 @@
+{
+  "id": "61e6a446",
+  "reason": "Bot names reach a root command (sudo systemctl ... trading-bot@NAME.service). The sudoers rules match trading-bot@*.service, and sudoers '*' also matches spaces, so that pattern alone is not airtight. Allowing only letters, digits, - and _ is the real guard; deploy/sudoers-trading is the second layer.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "BOTNAME_RE = re.compile(r\"^[A-Za-z0-9_\\-]{1,40}$\")",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "webapp/app.py",
+      "scope": "",
+      "kind": "Assign",
+      "line": 100,
+      "exact": "8591c03b27ada565",
+      "shape": "562025620f92caf9",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.5,
+      "tokens": ["BOTNAME_RE", "=", "re", ".", "compile", "(", "r\"^[A-Za-z0-9_\\-]{1,40}$\"", ")"]
+    }
+  }
+}

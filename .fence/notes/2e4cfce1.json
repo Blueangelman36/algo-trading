@@ -1,0 +1,29 @@
+{
+  "id": "2e4cfce1",
+  "reason": "These journalctl arguments must match the pinned rule in deploy/sudoers-trading exactly (-n 200 --no-pager). sudo -n refuses anything else, and the old rule's trailing * let arbitrary extra journalctl arguments run as root.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "ok, output = run_cmd(\n    [\"sudo\", \"-n\", \"journalctl\", \"-u\", f\"{UNIT_PREFIX}{name}.service\",\n     \"-n\", \"200\",  # asof:journal-lines\n     \"--no-pager\"], timeout=30)",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "webapp/app.py",
+      "scope": "logs",
+      "kind": "Assign",
+      "line": 471,
+      "exact": "976b2c87a01e4243",
+      "shape": "d2d6e8aa74e9410f",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.45714285714285713,
+      "tokens": ["ok", ",", "output", "=", "run_cmd", "(", "[", "\"sudo\"", ",", "\"-n\"", ",", "\"journalctl\"", ",", "\"-u\"", ",", "f\"", "{", "UNIT_PREFIX", "}", "{", "name", "}", ".service", "\"", ",", "\"-n\"", ",", "\"200\"", ",", "\"--no-pager\"", "]", ",", "timeout", "=", "30", ")"]
+    }
+  }
+}

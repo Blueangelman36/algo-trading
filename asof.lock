@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "claims": {
+    "cl-contract-notional": {
+      "value": "70k",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "SETUP_GUIDE.md"
+      ]
+    },
+    "dashboard-port": {
+      "value": "8000",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "run",
+      "files": [
+        "IMPLEMENTATION_GUIDE.md",
+        "WEB_DASHBOARD.md",
+        "webapp/app.py"
+      ]
+    },
+    "do-droplet-recommended": {
+      "value": "6",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "CLOUD_DEPLOYMENT.md"
+      ]
+    },
+    "do-droplet-smallest": {
+      "value": "4",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "CLOUD_DEPLOYMENT.md"
+      ]
+    },
+    "do-free-credit": {
+      "value": "200",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "CLOUD_DEPLOYMENT.md"
+      ]
+    },
+    "do-free-credit-days": {
+      "value": "60",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "CLOUD_DEPLOYMENT.md"
+      ]
+    },
+    "ibkr-paper-gateway-port": {
+      "value": "4002",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "SETUP_GUIDE.md"
+      ]
+    },
+    "ibkr-paper-tws-port": {
+      "value": "7497",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "SETUP_GUIDE.md",
+        "run_paper.py"
+      ]
+    },
+    "journal-lines": {
+      "value": "\"200\"",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "run",
+      "files": [
+        "webapp/app.py"
+      ]
+    },
+    "log-refresh-seconds": {
+      "value": "5s",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "run",
+      "files": [
+        "IMPLEMENTATION_GUIDE.md",
+        "WEB_DASHBOARD.md"
+      ]
+    },
+    "opec-last": {
+      "value": "2026-11-29",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "IMPLEMENTATION_GUIDE.md",
+        "research/event_calendar.py"
+      ]
+    },
+    "python-version": {
+      "value": "3.12",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "manual",
+      "files": [
+        "CLOUD_DEPLOYMENT.md",
+        "SETUP_GUIDE.md"
+      ]
+    },
+    "research-job-cap-minutes": {
+      "value": "30",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "run",
+      "files": [
+        "IMPLEMENTATION_GUIDE.md",
+        "WEB_DASHBOARD.md"
+      ]
+    },
+    "status-refresh-seconds": {
+      "value": "8",
+      "checked": "2026-10-03T20:42:56Z",
+      "source": "run",
+      "files": [
+        "WEB_DASHBOARD.md"
+      ]
+    }
+  }
+}

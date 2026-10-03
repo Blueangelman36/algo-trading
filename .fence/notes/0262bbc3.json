@@ -1,0 +1,29 @@
+{
+  "id": "0262bbc3",
+  "reason": "The daily loss limit must re-anchor at each day roll. The old code anchored equity at launch, so a bot running 24/7 enforced a since-launch drawdown instead of the documented daily limit.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "self.start_equity = None          # re-anchor to today's open equity",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "live/trader.py",
+      "scope": "RiskManager._roll_day",
+      "kind": "Assign",
+      "line": 57,
+      "exact": "bfc7b125edf4b9fc",
+      "shape": "b60791920fc18bc3",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 1,
+        "other_shape": 2,
+        "far_exact": 0,
+        "far_shape": 3
+      },
+      "rival": 0.2857142857142857,
+      "tokens": ["self", ".", "start_equity", "=", "None"]
+    }
+  }
+}

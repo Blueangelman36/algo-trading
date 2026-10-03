@@ -1,0 +1,39 @@
+# Trading dashboard service.
+#
+# CHANGES vs previous version:
+#   --workers 2 (sync)  ->  --workers 1 --worker-class gthread --threads 8
+#
+# Why: research jobs now run as background threads inside the app and the
+# browser polls for results. One threaded worker means: (a) job state and
+# sessions live in one process, (b) eight requests can be served at once so
+# the UI never freezes, (c) the 900s request timeout is gone — no request
+# blocks anymore, so 120s is plenty.
+#
+# Assumes the `trader` user and /home/trader/algo-trading from
+# CLOUD_DEPLOYMENT.md. Using a different user? Change User= and every path.
+#
+# Install:
+#   sudo cp deploy/dashboard.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl restart dashboard
+
+[Unit]
+Description=Trading dashboard (web UI)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=trader
+WorkingDirectory=/home/trader/algo-trading
+EnvironmentFile=/home/trader/algo-trading/dashboard.env
+ExecStart=/home/trader/algo-trading/venv/bin/gunicorn \
+    --chdir /home/trader/algo-trading/webapp \
+    --bind 127.0.0.1:8000 \
+    --worker-class gthread --workers 1 --threads 8 \
+    --timeout 120 \
+    app:app
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

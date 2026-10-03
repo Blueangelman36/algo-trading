@@ -1,0 +1,12 @@
+// Open in GitHub Codespaces (or VS Code Dev Containers) for a ready terminal:
+// dependencies installed, backtests runnable with nothing set up locally.
+{
+  "name": "algo-trading",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "postCreateCommand": "pip install -r requirements-dev.txt && fence init",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  }
+}

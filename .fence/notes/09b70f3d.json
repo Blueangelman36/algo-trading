@@ -1,0 +1,29 @@
+{
+  "id": "09b70f3d",
+  "reason": "Alpaca returns at most 50 articles per request, newest first, so a full page means older articles were cut off. The old loop made one request per 30-day window and silently truncated the busy months (OPEC cuts, hurricanes) the news filter exists for.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "if len(got) < PAGE:\n    break",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "run_news_fetch.py",
+      "scope": "fetch_window",
+      "kind": "If",
+      "line": 52,
+      "exact": "0f4f125afa46ddd8",
+      "shape": "a652be7981baa2ed",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.16666666666666666,
+      "tokens": ["if", "len", "(", "got", ")", "<", "PAGE", ":", "break"]
+    }
+  }
+}

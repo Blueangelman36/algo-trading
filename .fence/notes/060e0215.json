@@ -1,0 +1,29 @@
+{
+  "id": "060e0215",
+  "reason": "EIA delays the petroleum report one day when a federal holiday falls Monday through Wednesday of the report week, not only on Monday (Veterans Day 2026 is a Wednesday). The old Monday-only rule put the blackout on the wrong day.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "if any((monday + timedelta(days=i)) in hols for i in range(3)):\n    return wednesday + timedelta(days=1)   # slips to Thursday",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "research/event_calendar.py",
+      "scope": "eia_petroleum_day",
+      "kind": "If",
+      "line": 95,
+      "exact": "6055bdfebd5f0bcf",
+      "shape": "d9594fdee830c73e",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.12380952380952381,
+      "tokens": ["if", "any", "(", "(", "monday", "+", "timedelta", "(", "days", "=", "i", ")", ")", "in", "hols", "for", "i", "in", "range", "(", "3", ")", ")", ":", "return", "wednesday", "+", "timedelta", "(", "days", "=", "1", ")"]
+    }
+  }
+}

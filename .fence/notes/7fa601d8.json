@@ -1,0 +1,29 @@
+{
+  "id": "7fa601d8",
+  "reason": "Same gross cap as live/trader.py. Backtest and live must apply identical math, or a backtest assumes leverage the live bot will never take.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "budget = equity * self.max_lev",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "backtest/engine.py",
+      "scope": "BacktestEngine._execute_targets",
+      "kind": "Assign",
+      "line": 94,
+      "exact": "c2fa7e1e46b7c658",
+      "shape": "3768a6bc52390eee",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.22857142857142856,
+      "tokens": ["budget", "=", "equity", "*", "self", ".", "max_lev"]
+    }
+  }
+}

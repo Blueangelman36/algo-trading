@@ -1,0 +1,29 @@
+{
+  "id": "2de3cea5",
+  "reason": "Leverage is deliberately off (max_gross_leverage=1.0) and capped at the portfolio level, so holdings the strategy did not target count too. Raising it is meant to be one deliberate change; nothing in the dashboard exposes it.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "budget = equity * self.risk.max_gross_leverage",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "live/trader.py",
+      "scope": "LiveTrader.step",
+      "kind": "Assign",
+      "line": 148,
+      "exact": "69a475e38e11c5de",
+      "shape": "8a2d4e07749a4fd1",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.3333333333333333,
+      "tokens": ["budget", "=", "equity", "*", "self", ".", "risk", ".", "max_gross_leverage"]
+    }
+  }
+}

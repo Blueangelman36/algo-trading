@@ -1,0 +1,29 @@
+{
+  "id": "febee1e8",
+  "reason": "Live bots run for weeks. Without a TTL, filings were cached at startup forever, so a long-running bot never saw a new 8-K.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "expired = (now - loaded) > self.ttl_hours * 3600",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "research/sec_filings.py",
+      "scope": "SecVetoSource._filings",
+      "kind": "Assign",
+      "line": 231,
+      "exact": "bdd807be03013efc",
+      "shape": "2427d18acfafe0bb",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.2222222222222222,
+      "tokens": ["expired", "=", "(", "now", "-", "loaded", ")", ">", "self", ".", "ttl_hours", "*", "3600"]
+    }
+  }
+}

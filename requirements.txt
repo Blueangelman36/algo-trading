@@ -1,0 +1,8 @@
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.7
+yfinance>=0.2.40        # historical data for backtests
+alpaca-py>=0.20.0       # live paper trading: stocks / ETFs / options
+ib_async>=1.0.0         # live paper trading: futures / commodities (crude CL) via IBKR
+statsmodels>=0.14       # optional: cointegration test for pairs (coint/ADF)
+flask>=3.0              # web dashboard (webapp/); the server also needs gunicorn

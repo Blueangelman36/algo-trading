@@ -1,0 +1,29 @@
+{
+  "id": "c1f06408",
+  "reason": "The channel excludes the current bar. A breakout has to beat past bars, not itself; including the current bar makes the channel high equal to the price that is supposed to break it.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "hi_entry = float(c.iloc[-self.entry - 1:-1].max())",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "strategies/pyramiding_breakout.py",
+      "scope": "PyramidingBreakout.on_bar",
+      "kind": "Assign",
+      "line": 88,
+      "exact": "e0d9644b7cefd76e",
+      "shape": "9ac2a7364320c7e1",
+      "dupes": {
+        "exact": 1,
+        "shape": 4,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 1,
+        "far_shape": 4
+      },
+      "rival": 0.7619047619047619,
+      "tokens": ["hi_entry", "=", "float", "(", "c", ".", "iloc", "[", "-", "self", ".", "entry", "-", "1", ":", "-", "1", "]", ".", "max", "(", ")", ")"]
+    }
+  }
+}

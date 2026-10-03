@@ -1,0 +1,29 @@
+{
+  "id": "80bf773d",
+  "reason": "Login throttle: each wrong password costs half a second, on top of the per-IP lockout in _throttled. This password is all that stands between a visitor and starting or stopping the trading bots.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "time.sleep(0.5)   # slow down guessing",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "webapp/app.py",
+      "scope": "login",
+      "kind": "Expr.Call",
+      "line": 227,
+      "exact": "c6545c8c24b087ba",
+      "shape": "5c23b4caa15ccee0",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.14285714285714285,
+      "tokens": ["time", ".", "sleep", "(", "0.5", ")"]
+    }
+  }
+}

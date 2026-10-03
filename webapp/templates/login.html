@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in</title>
+<style>
+ body{margin:0;height:100vh;display:grid;place-items:center;background:#0f1115;
+      color:#e6e9ef;font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+ form{background:#171a21;border:1px solid #252a34;border-radius:12px;padding:26px;
+      width:320px}
+ h1{font-size:17px;margin:0 0 16px}
+ .paper{font-size:11px;color:#fbbf24;border:1px solid #3d3320;border-radius:99px;
+        padding:1px 8px;vertical-align:2px;margin-left:6px}
+ input{width:100%;padding:10px 12px;background:#0d0f14;color:#e6e9ef;
+       border:1px solid #252a34;border-radius:7px;margin-bottom:12px;box-sizing:border-box}
+ button{width:100%;padding:10px;border:0;border-radius:7px;background:#60a5fa;
+        color:#06101f;font-weight:600;cursor:pointer}
+ .flash{background:#2a1619;border:1px solid #4a2530;color:#f87171;padding:9px 12px;
+        border-radius:7px;margin-bottom:12px;font-size:14px}
+</style></head>
+<body>
+<form method="post">
+  <h1>◧ Trading Dashboard<span class="paper">PAPER</span></h1>
+  {% with msgs = get_flashed_messages() %}
+    {% for m in msgs %}<div class="flash">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  <input type="password" name="password" placeholder="Password"
+         autocomplete="current-password" autofocus required>
+  <button type="submit">Log in</button>
+</form>
+</body></html>

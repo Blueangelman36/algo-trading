@@ -1,0 +1,24 @@
+name: Stale claims
+
+# Monday morning: nothing changed, but time passed, and time is what makes a
+# hand-checked number (prices, OPEC dates, IBKR ports) go stale. Opens an
+# issue, or comments on the open one, instead of blocking anybody's merge.
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Blueangelman36/asof@58b21c8eaa015d2e43c20269916124aa796e9c0e  # v0.4.0
+        with:
+          args: check --no-run --fail-on stale
+          open-issue: true

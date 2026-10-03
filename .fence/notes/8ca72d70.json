@@ -1,0 +1,29 @@
+{
+  "id": "8ca72d70",
+  "reason": "Pairs are all-or-nothing: if any opening leg is vetoed, drop every opening leg. Otherwise the bot opens one naked, unhedged leg of a market-neutral trade.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "if self.coupled:\n    blocked = set(opening)\n    why = \"; \".join(f\"{s}: {r}\" for s, r in reasons.items())\nelse:\n    blocked = set(reasons)\n    why = \"; \".join(f\"{s}: {r}\" for s, r in reasons.items())",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "strategies/news_filter.py",
+      "scope": "NewsFilter.on_bar",
+      "kind": "If",
+      "line": 186,
+      "exact": "6cbb338dfbc97305",
+      "shape": "716c2c158f53ce16",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.21978021978021978,
+      "tokens": ["if", "self", ".", "coupled", ":", "blocked", "=", "set", "(", "opening", ")", "why", "=", "\"; \"", ".", "join", "(", "f\"", "{", "s", "}", ": ", "{", "r", "}", "\"", "for", "s", ",", "r", "in", "reasons", ".", "items", "(", ")", ")", "else", ":", "blocked", "=", "set", "(", "reasons", ")", "why", "=", "\"; \"", ".", "join", "(", "f\"", "{", "s", "}", ": ", "{", "r", "}", "\"", "for", "s", ",", "r", "in", "reasons", ".", "items", "(", ")", ")"]
+    }
+  }
+}

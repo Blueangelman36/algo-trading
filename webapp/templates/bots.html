@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% set active = 'bots' %}
+{% block body %}
+<h1>Bots</h1>
+<div class="sub">Each bot runs one strategy on its own symbols. Changes take effect on restart.
+Start/Stop also enable/disable the bot at boot. Status refreshes automatically.</div>
+
+<div class="card scroll">
+  <table>
+    <tr><th>Name</th><th>Symbols</th><th>Strategy</th><th>Interval</th>
+        <th>Sizing</th><th>Filters</th><th>Status</th>
+        <th style="text-align:right">Actions</th></tr>
+    {% for b in bots %}
+    <tr>
+      <td class="mono">{{ b.name }}</td>
+      <td class="mono">{{ b.symbols|join(' ') }}</td>
+      <td>{{ labels.get(b.strategy, b.strategy) }}</td>
+      <td>{{ b.interval }}</td>
+      <td style="font-size:12px;color:#98a2b3">
+        {{ ('vol ' ~ b.vol_target) if b.vol_target else 'fixed' }}
+      </td>
+      <td style="font-size:12px;color:#98a2b3">
+        {% set fs = [] %}
+        {% if b.event_blackout %}{% set _ = fs.append('events') %}{% endif %}
+        {% if b.news_filter %}{% set _ = fs.append('news') %}{% endif %}
+        {% if b.earnings_blackout %}{% set _ = fs.append('earnings') %}{% endif %}
+        {% if b.sec_blackout %}{% set _ = fs.append('SEC') %}{% endif %}
+        {% if b.regime_filter %}{% set _ = fs.append('regime') %}{% endif %}
+        {{ fs|join(', ') if fs else '—' }}
+      </td>
+      <td>
+        {% set s = b.status %}
+        <span class="pill {{ 'active' if s=='active' else ('failed' if s=='failed' else 'inactive') }}"
+              data-bot="{{ b.name }}">{{ s }}</span>
+      </td>
+      <td style="text-align:right;white-space:nowrap">
+        <button type="button" class="ghost" onclick='fillForm({{ b|tojson }})'>Edit</button>
+        <form class="inline" method="post" action="{{ url_for('bots_action', name=b.name, action='start') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="ghost">Start</button></form>
+        <form class="inline" method="post" action="{{ url_for('bots_action', name=b.name, action='restart') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="ghost">Restart</button></form>
+        <form class="inline" method="post" action="{{ url_for('bots_action', name=b.name, action='stop') }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="ghost">Stop</button></form>
+        <a href="{{ url_for('logs', name=b.name) }}"><button type="button" class="ghost">Logs</button></a>
+        <form class="inline" method="post" action="{{ url_for('bots_delete', name=b.name) }}"
+              onsubmit="return confirm('Stop, disable, and delete bot {{ b.name }}?')">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="danger">Delete</button></form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="8" style="color:#98a2b3">No bots yet — add one below.</td></tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="card" id="eventscard" style="display:none">
+  <h1 style="font-size:16px;margin-bottom:4px">Upcoming catalysts (next 7 days)</h1>
+  <div class="sub" style="margin-bottom:10px">Same calendar the event-blackout filter uses — bots with it enabled stand aside around these.</div>
+  <div id="opecstale" class="flash error" style="display:none"></div>
+  <div class="scroll"><table id="eventstable">
+    <tr><th>Event</th><th>When (your time)</th><th>Severity</th><th>Affects</th></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <h1 style="font-size:16px" id="formtitle">Add / update a bot</h1>
+  <div class="sub">Using an existing name overwrites that bot's settings. Hit Edit on a row to load it here.</div>
+  <form method="post" action="{{ url_for('bots_save') }}" id="botform">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="row">
+      <div><label>Name</label><input name="name" placeholder="uso-meanrev" required></div>
+      <div style="flex:2"><label>Symbols (space separated)</label><input name="symbols" placeholder="USO" required></div>
+    </div>
+    <div class="row">
+      <div><label>Strategy</label>
+        <select name="strategy" onchange="strategyHint()">
+          {% for s in strategies %}<option value="{{ s }}">{{ labels.get(s, s) }}</option>{% endfor %}
+        </select></div>
+      <div><label>Interval</label>
+        <select name="interval">{% for i in intervals %}<option {{ 'selected' if i=='5Min' }}>{{ i }}</option>{% endfor %}</select></div>
+      <div><label>Broker</label>
+        <select name="broker">{% for b in brokers %}<option>{{ b }}</option>{% endfor %}</select></div>
+      <div><label>Max daily loss %</label><input name="max_daily_loss" value="3.0"></div>
+      <div><label>Max per symbol</label><input name="max_per_symbol" value="0.25"></div>
+      <div><label>Vol target (ann.)</label><input name="vol_target" placeholder="blank = off"></div>
+    </div>
+    <div id="strathint" class="note" style="margin:0 0 12px"></div>
+    <div style="margin:14px 0 4px">
+      <label style="margin-bottom:8px">Filters (defensive — veto new entries, never block exits)</label>
+      <div style="display:flex;gap:18px;flex-wrap:wrap">
+        <label class="check"><input type="checkbox" name="event_blackout"> EIA / OPEC events <span style="color:#98a2b3">(oil)</span></label>
+        <label class="check"><input type="checkbox" name="news_filter"> News catalysts</label>
+        <label class="check"><input type="checkbox" name="earnings_blackout"> Earnings <span style="color:#98a2b3">(stocks only)</span></label>
+        <label class="check"><input type="checkbox" name="sec_blackout"> SEC 8-K filings</label>
+        <label class="check"><input type="checkbox" name="regime_filter"> Regime filter <span style="color:#98a2b3">(ER-based)</span></label>
+      </div>
+    </div>
+    <button type="submit">Save bot</button>
+    <div class="note">
+      Vol target sizes positions for a constant annualized risk (e.g. <span class="mono">0.15</span>);
+      blank keeps fixed-fraction sizing. After saving, hit <strong>Restart</strong> to apply.
+      Two bots can't share a symbol — they'd fight over the position.
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const HINTS = {
+  meanrev:  "Fades stretches from the mean. Regime filter recommended — its worst enemy is a trend.",
+  momentum: "Time-series trend following on each symbol independently.",
+  pairs:    "Market-neutral spread trading. Needs exactly 2 symbols.",
+  breakout: "Donchian channel trend following. Expect ~30–45% win rate with a fat right tail — that's healthy.",
+  pyramid:  "Breakout that scales into winners (Turtle-style). Bigger wins, deeper drawdowns; regime filter recommended.",
+  xsec:     "Ranks a universe by trailing return, holds the leaders. Needs 3+ symbols; rebalances ~monthly."
+};
+function strategyHint(){
+  const s = document.querySelector('#botform [name=strategy]').value;
+  document.getElementById('strathint').textContent = HINTS[s] || '';
+}
+strategyHint();
+
+function fillForm(b){
+  const f = document.getElementById('botform');
+  f.name.value = b.name || '';
+  f.symbols.value = (b.symbols || []).join(' ');
+  f.strategy.value = b.strategy || 'meanrev';
+  f.interval.value = b.interval || '5Min';
+  f.broker.value = b.broker || 'alpaca';
+  f.max_daily_loss.value = b.max_daily_loss ?? 3.0;
+  f.max_per_symbol.value = b.max_per_symbol ?? 0.25;
+  f.vol_target.value = b.vol_target ?? '';
+  for (const k of ['event_blackout','news_filter','earnings_blackout','sec_blackout','regime_filter'])
+    f[k].checked = !!b[k];
+  strategyHint();
+  document.getElementById('formtitle').textContent = 'Editing: ' + b.name;
+  f.scrollIntoView({behavior:'smooth'});
+}
+
+async function refreshStatus(){
+  try {
+    const r = await fetch('{{ url_for("api_bots") }}');
+    if (!r.ok) return;
+    for (const b of await r.json()){
+      const el = document.querySelector(`[data-bot="${b.name}"]`);
+      if (!el) continue;
+      el.textContent = b.status;
+      el.className = 'pill ' + (b.status === 'active' ? 'active'
+                     : (b.status === 'failed' ? 'failed' : 'inactive'));
+    }
+  } catch (e) { /* transient — try again next tick */ }
+}
+setInterval(refreshStatus, 8000);
+
+async function loadEvents(){
+  try {
+    const r = await fetch('{{ url_for("api_events") }}');
+    if (!r.ok) return;
+    const data = await r.json();
+    if (data.error || !data.events) return;   // research/ not installed — hide panel
+    const card = document.getElementById('eventscard');
+    const tbl = document.getElementById('eventstable');
+    for (const e of data.events){
+      const tr = document.createElement('tr');
+      const when = new Date(e.when);
+      const sev = e.severity === 'high'
+        ? '<span class="pill failed">high</span>'
+        : '<span class="pill inactive">medium</span>';
+      tr.innerHTML = `<td>${e.name}</td>` +
+        `<td class="mono">${when.toLocaleString([], {weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})}</td>` +
+        `<td>${sev}</td>` +
+        `<td style="font-size:12px;color:#98a2b3">${e.symbols.slice(0,6).join(' ')}${e.symbols.length>6?' …':''}</td>`;
+      tbl.appendChild(tr);
+    }
+    if (data.opec_stale){
+      const w = document.getElementById('opecstale');
+      w.textContent = 'OPEC meeting dates are STALE (last known: ' +
+        data.opec_stale_after.slice(0,10) +
+        '). Refresh OPEC_DATES in research/event_calendar.py from opec.org — meetings past that date are NOT covered by the blackout filter.';
+      w.style.display = '';
+    }
+    card.style.display = '';
+  } catch (e) { /* leave panel hidden */ }
+}
+loadEvents();
+</script>
+{% endblock %}

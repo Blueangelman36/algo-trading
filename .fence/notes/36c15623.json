@@ -1,0 +1,29 @@
+{
+  "id": "36c15623",
+  "reason": "Vetoes never block exits. A vetoed flip becomes a flatten: the exit half runs and only the new entry is suppressed. The old code dropped the target entirely, which held the OLD position open through the catalyst.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "out[s] = 0.0    # vetoed flip -> exit to flat instead",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "strategies/news_filter.py",
+      "scope": "NewsFilter.on_bar",
+      "kind": "Assign",
+      "line": 212,
+      "exact": "7933328343a8478f",
+      "shape": "a8c15fbe370f5b32",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 6
+      },
+      "rival": 0.6923076923076923,
+      "tokens": ["out", "[", "s", "]", "=", "0.0"]
+    }
+  }
+}

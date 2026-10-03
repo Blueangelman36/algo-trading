@@ -1,0 +1,29 @@
+{
+  "id": "05470b38",
+  "reason": "ib.sleep pumps ib_async's event loop while waiting, so fills and price updates keep processing. time.sleep here would freeze the connection.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "self.ib.sleep(seconds)",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "live/ibkr_bot.py",
+      "scope": "IBKRBroker.sleep",
+      "kind": "Expr.Call",
+      "line": 200,
+      "exact": "3d123b77f4475c07",
+      "shape": "bf5379db5d7e67fb",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 2,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.0,
+      "tokens": ["self", ".", "ib", ".", "sleep", "(", "seconds", ")"]
+    }
+  }
+}

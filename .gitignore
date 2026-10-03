@@ -1,0 +1,25 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Keys and passwords live in env files on the machine that runs the bot,
+# never in the repo (see CLOUD_DEPLOYMENT.md, WEB_DASHBOARD.md).
+.env
+*.env
+
+# Per-deployment bot configs, written by the dashboard
+bots/
+
+# Caches and run outputs
+.edgar_cache/
+news_cache.json
+news_*.json
+*.csv
+*.png
+!sample_equity.png
+asof.html
+
+# An older copy of the project, kept locally only
+/algo-trading/

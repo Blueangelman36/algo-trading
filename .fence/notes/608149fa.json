@@ -1,0 +1,29 @@
+{
+  "id": "608149fa",
+  "reason": "Earnings dates get scheduled and moved after a bot starts. Without the TTL, a long-running bot kept treating a moved date as fixed.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "fresh = (now - self._loaded_at.get(sym, 0.0)) < self.ttl_hours * 3600",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "research/earnings_calendar.py",
+      "scope": "EarningsCalendar.ensure",
+      "kind": "Assign",
+      "line": 100,
+      "exact": "a5f9189e94d86163",
+      "shape": "50f3a5791f0105c9",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.18181818181818182,
+      "tokens": ["fresh", "=", "(", "now", "-", "self", ".", "_loaded_at", ".", "get", "(", "sym", ",", "0.0", ")", ")", "<", "self", ".", "ttl_hours", "*", "3600"]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "670b1340",
+  "reason": "Explicit DASHBOARD_SECRET_KEY wins; otherwise the key is derived from the password so it is identical in every gunicorn worker. The old fallback (os.urandom per process) made each worker sign sessions differently, which logged people out at random with --workers 2.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "_secret = os.environ.get(\"DASHBOARD_SECRET_KEY\")",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "webapp/app.py",
+      "scope": "",
+      "kind": "Assign",
+      "line": 79,
+      "exact": "b885bb39a57874cf",
+      "shape": "4b75a2aac08c5971",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.5652173913043478,
+      "tokens": ["_secret", "=", "os", ".", "environ", ".", "get", "(", "\"DASHBOARD_SECRET_KEY\"", ")"]
+    }
+  }
+}

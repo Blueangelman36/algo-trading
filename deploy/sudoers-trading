@@ -1,0 +1,28 @@
+# Install to /etc/sudoers.d/trading  (chmod 0440, verify with: sudo visudo -c)
+#
+# `trader` is the user the dashboard runs as (see deploy/dashboard.service).
+# Using a different user? Change the first word of every rule below.
+#
+# Lets the dashboard control ONLY the trading-bot units and read their logs.
+# It cannot run any other command as root. This is the entire privileged
+# surface of the web app — keep it this narrow.
+#
+# CHANGES vs previous version:
+#   + enable --now / disable --now: the dashboard's Start/Stop buttons now
+#     use these so a stopped bot STAYS stopped across reboots and a deleted
+#     bot can't leave an enabled unit restart-looping after reboot.
+#   + journalctl arguments are pinned to exactly what the app sends
+#     (-n 200 --no-pager); the old trailing * allowed arbitrary extra
+#     journalctl arguments as root.
+#
+# Caveat worth knowing: sudoers '*' wildcards also match spaces, so patterns
+# like trading-bot@*.service are not airtight on their own. The dashboard's
+# strict bot-name validation (letters/digits/-/_ only) is the real guard;
+# this file is the second layer.
+
+trader ALL=(root) NOPASSWD: /usr/bin/systemctl start trading-bot@*.service
+trader ALL=(root) NOPASSWD: /usr/bin/systemctl stop trading-bot@*.service
+trader ALL=(root) NOPASSWD: /usr/bin/systemctl restart trading-bot@*.service
+trader ALL=(root) NOPASSWD: /usr/bin/systemctl enable --now trading-bot@*.service
+trader ALL=(root) NOPASSWD: /usr/bin/systemctl disable --now trading-bot@*.service
+trader ALL=(root) NOPASSWD: /usr/bin/journalctl -u trading-bot@*.service -n 200 --no-pager

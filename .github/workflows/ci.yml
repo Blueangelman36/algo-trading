@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    # Every README example that needs no account, keys or network.
+    runs-on: ubuntu-latest
+    env:
+      MPLBACKEND: Agg
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"  # asof:python-version
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Everything compiles
+        run: python -m compileall -q backtest data live research strategies webapp tools *.py
+      - name: Backtest
+        run: python run_backtest.py --synthetic --strategy meanrev
+      - name: Pair screener
+        run: python run_screener.py --synthetic
+      - name: Walk-forward
+        run: python run_walkforward.py --synthetic --strategy meanrev --train 250 --test 60
+      - name: Options backtest
+        run: python run_options_backtest.py --synthetic --strategy momentum
+
+  claims:
+    # The numbers in the docs, checked against the code that decides them.
+    # Overdue hand-checked numbers are a weekly reminder instead
+    # (stale-claims.yml), not a reason to fail someone's push.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"  # asof:python-version
+      - uses: Blueangelman36/asof@58b21c8eaa015d2e43c20269916124aa796e9c0e  # v0.4.0
+
+  fence:
+    # Fails when a change removes code that has a recorded reason (.fence/).
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write  # quotes the reasons a pull request touches
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Blueangelman36/chesterton@a5842f13016ae1fc0790442872fa3bd97f4196df  # v0.1.0
+        with:
+          implementation: python  # the build these notes were written with
+          comment-on-pr: true

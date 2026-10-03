@@ -1,0 +1,7 @@
+-r requirements.txt
+
+# Repo guardrails (see AGENTS.md). Keep these pinned to the same releases as
+# .github/workflows/ci.yml: each fence build writes its own anchor scheme, so
+# an unpinned upgrade can quietly stop checking the notes in .fence/.
+chesterton @ git+https://github.com/Blueangelman36/chesterton@v0.1.0#subdirectory=python
+asof-claims @ git+https://github.com/Blueangelman36/asof@v0.4.0

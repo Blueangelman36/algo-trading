@@ -1,0 +1,29 @@
+{
+  "id": "7c2a20d4",
+  "reason": "Last check before sudo: reject any action not in ACTION_ARGV and any bot name that fails BOTNAME_RE. Without it, a crafted name could pass extra arguments to systemctl as root.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "if action not in ACTION_ARGV or not BOTNAME_RE.match(name):\n    return False, \"Rejected: invalid action or bot name.\"",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "webapp/app.py",
+      "scope": "systemctl",
+      "kind": "If",
+      "line": 259,
+      "exact": "2784f29be978f991",
+      "shape": "96a92ac2c7c5e75c",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.43243243243243246,
+      "tokens": ["if", "action", "not", "in", "ACTION_ARGV", "or", "not", "BOTNAME_RE", ".", "match", "(", "name", ")", ":", "return", "False", ",", "<c17e14d3>"]
+    }
+  }
+}

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Trading Dashboard{% endblock %}</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --line:#252a34; --txt:#e6e9ef;
+    --muted:#98a2b3; --accent:#4ade80; --warn:#fbbf24; --bad:#f87171;
+    --blue:#60a5fa;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+  header{display:flex;align-items:center;gap:22px;padding:14px 22px;
+         background:var(--panel);border-bottom:1px solid var(--line)}
+  header .brand{font-weight:650;letter-spacing:.2px}
+  header .paper{font-size:11px;color:var(--warn);border:1px solid #3d3320;
+         border-radius:99px;padding:1px 8px;letter-spacing:.4px}
+  header a{color:var(--muted);text-decoration:none;padding:6px 2px;font-size:14px}
+  header a:hover,header a.on{color:var(--txt);border-bottom:2px solid var(--accent)}
+  header .sp{margin-left:auto}
+  main{max-width:1100px;margin:26px auto;padding:0 22px}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:20px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:18px;margin-bottom:16px}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;
+        text-transform:uppercase;letter-spacing:.4px}
+  input,select{width:100%;padding:9px 11px;background:#0d0f14;color:var(--txt);
+        border:1px solid var(--line);border-radius:7px;font-size:14px}
+  input:focus,select:focus{outline:none;border-color:var(--blue)}
+  .row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .row > div{flex:1;min-width:130px}
+  button{padding:9px 16px;border:0;border-radius:7px;font-size:14px;font-weight:550;
+         cursor:pointer;background:var(--blue);color:#06101f}
+  button:hover{filter:brightness(1.1)}
+  button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  button.danger{background:transparent;color:var(--bad);border:1px solid #4a2530}
+  button:disabled{opacity:.5;cursor:default}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;
+     text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;
+     border-bottom:1px solid var(--line)}
+  td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  .pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;
+        font-weight:600}
+  .pill.active{background:#123024;color:var(--accent)}
+  .pill.inactive{background:#2a2118;color:var(--warn)}
+  .pill.failed{background:#3a1d22;color:var(--bad)}
+  .pill.unknown{background:#20242e;color:var(--muted)}
+  pre{background:#0a0c10;border:1px solid var(--line);border-radius:8px;padding:14px;
+      overflow:auto;font-size:12.5px;line-height:1.5;max-height:560px;
+      font-family:ui-monospace,"Cascadia Code",Consolas,monospace}
+  .flash{padding:10px 14px;border-radius:8px;margin-bottom:12px;font-size:14px}
+  .flash.ok{background:#12261c;border:1px solid #1e4531;color:var(--accent)}
+  .flash.error{background:#2a1619;border:1px solid #4a2530;color:var(--bad)}
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+  .mono{font-family:ui-monospace,Consolas,monospace;font-size:13px}
+  form.inline{display:inline}
+  .check{ text-transform:none;letter-spacing:0;color:var(--txt);
+          display:flex;align-items:center;gap:6px;font-size:14px }
+  .check input{width:auto}
+  .spinner{display:inline-block;width:13px;height:13px;border-radius:50%;
+      border:2px solid var(--line);border-top-color:var(--blue);
+      animation:spin .8s linear infinite;vertical-align:-2px;margin-right:7px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <span class="brand">◧ Trading Dashboard</span>
+  <span class="paper">PAPER</span>
+  <a href="{{ url_for('bots') }}" class="{{ 'on' if active=='bots' }}">Bots</a>
+  <a href="{{ url_for('research') }}" class="{{ 'on' if active=='research' }}">Research</a>
+  <a href="{{ url_for('logs') }}" class="{{ 'on' if active=='logs' }}">Logs</a>
+  <span class="sp"></span>
+  <a href="{{ url_for('logout') }}">Log out</a>
+</header>
+<main>
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat,msg in msgs %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+  {% endwith %}
+  {% block body %}{% endblock %}
+</main>
+{% block scripts %}{% endblock %}
+</body>
+</html>

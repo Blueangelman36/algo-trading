@@ -1,0 +1,29 @@
+{
+  "id": "d98e84a3",
+  "reason": "Every action that changes something (start, stop, delete a bot, run research) is a POST. Without the CSRF token, any page the logged-in user visits could submit those forms.",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "if request.method == \"POST\" and request.endpoint not in (\"login\",):\n    tok = session.get(\"_csrf\")\n    given = request.form.get(\"_csrf\", \"\")\n    if not tok or not hmac.compare_digest(given, tok):\n        abort(400, \"Missing or invalid CSRF token — reload the page.\")",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "webapp/app.py",
+      "scope": "csrf_protect",
+      "kind": "If",
+      "line": 165,
+      "exact": "f41f0ef14ecd1250",
+      "shape": "ee1029c5a74bc3aa",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.43037974683544306,
+      "tokens": ["if", "request", ".", "method", "==", "\"POST\"", "and", "request", ".", "endpoint", "not", "in", "(", "\"login\"", ",", ")", ":", "tok", "=", "session", ".", "get", "(", "\"_csrf\"", ")", "given", "=", "request", ".", "form", ".", "get", "(", "\"_csrf\"", ",", "\"\"", ")", "if", "not", "tok", "or", "not", "hmac", ".", "compare_digest", "(", "given", ",", "tok", ")", ":", "abort", "(", "400", ",", "<31850435>", ")"]
+    }
+  }
+}

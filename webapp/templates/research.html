@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% set active = 'research' %}
+{% block body %}
+<h1>Research</h1>
+<div class="sub">Screen for pairs, backtest an idea, then walk-forward it. Only deploy what survives the walk-forward.
+Jobs run in the background — you can leave this page and come back.</div>
+
+<div class="card">
+  <form method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="row">
+      <div><label>Tool</label>
+        <select name="tool" id="tool" onchange="toolFields()">
+          <option value="screener" {{ 'selected' if form.tool=='screener' }}>Screener (find pairs)</option>
+          <option value="backtest" {{ 'selected' if form.tool=='backtest' }}>Backtest</option>
+          <option value="walkforward" {{ 'selected' if form.tool=='walkforward' }}>Walk-forward (out-of-sample)</option>
+        </select></div>
+      <div style="flex:2"><label>Symbols</label>
+        <input name="symbols" value="{{ form.symbols }}" required></div>
+      <div><label>Strategy</label>
+        <select name="strategy" id="strategy">
+          {% for s in strategies %}<option value="{{ s }}" {{ 'selected' if s==form.strategy }}>{{ labels.get(s, s) }}</option>{% endfor %}
+        </select></div>
+    </div>
+    <div class="row">
+      <div><label>Start date</label><input name="start" value="{{ form.start }}"></div>
+      <div class="wf"><label>Train bars (WF)</label><input name="train" value="{{ form.train }}"></div>
+      <div class="wf"><label>Test bars (WF)</label><input name="test" value="{{ form.test }}"></div>
+    </div>
+    <button type="submit">Run</button>
+    <div class="note" id="toolnote"></div>
+  </form>
+</div>
+
+{% if job %}
+<div class="card" id="jobcard" data-job="{{ job_id }}" data-status="{{ job.status }}">
+  <div class="sub mono">{{ job.cmd }}</div>
+  <div id="jobstatus" style="margin-bottom:10px;font-size:14px">
+    {% if job.status == 'running' %}
+      <span class="spinner"></span>Running…
+    {% elif job.status == 'done' %}
+      <span style="color:var(--accent)">Finished</span>
+      {% if job.elapsed %}<span style="color:var(--muted)"> in {{ job.elapsed }}s</span>{% endif %}
+    {% else %}
+      <span style="color:var(--bad)">Failed</span>
+      {% if job.elapsed %}<span style="color:var(--muted)"> after {{ job.elapsed }}s</span>{% endif %}
+    {% endif %}
+  </div>
+  <pre id="jobout">{{ job.output or '(waiting for output…)' }}</pre>
+  <div class="note">
+    <strong>Reading it:</strong> screener — lower <span class="mono">coint_p</span> is stronger, half-life 5–40 days is the sweet spot,
+    watch <span class="mono">hedge_drift</span> (big = the hedge ratio wanders; risky live).
+    Backtest — expectancy per trade, max drawdown, and exposure matter most.
+    Walk-forward — efficiency below ~25% or unstable parameters across folds means overfit: kill it, don't tune it.
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+const NOTES = {
+  screener:    "Tests every pair for cointegration. Needs 2+ symbols. Strategy is ignored.",
+  backtest:    "Full-history backtest with costs. Pairs needs exactly 2 symbols; cross-sectional needs 3+.",
+  walkforward: "Optimizes on train windows, judges on unseen test windows. The honest number. Can take several minutes."
+};
+function toolFields(){
+  const t = document.getElementById('tool').value;
+  document.querySelectorAll('.wf').forEach(d => d.style.display = (t === 'walkforward' ? '' : 'none'));
+  document.getElementById('toolnote').textContent = NOTES[t] || '';
+}
+toolFields();
+
+{% if job %}
+const card = document.getElementById('jobcard');
+if (card && card.dataset.status === 'running'){
+  const statusEl = document.getElementById('jobstatus');
+  const outEl = document.getElementById('jobout');
+  const timer = setInterval(async () => {
+    try {
+      const r = await fetch("{{ url_for('research_status', job_id=job_id) }}");
+      if (!r.ok) return;
+      const j = await r.json();
+      if (j.status === 'running'){
+        statusEl.innerHTML = `<span class="spinner"></span>Running… ${j.elapsed ? j.elapsed + 's' : ''}`;
+        return;
+      }
+      clearInterval(timer);
+      statusEl.innerHTML = j.status === 'done'
+        ? `<span style="color:var(--accent)">Finished</span> <span style="color:var(--muted)">in ${j.elapsed}s</span>`
+        : `<span style="color:var(--bad)">Failed</span> <span style="color:var(--muted)">after ${j.elapsed}s</span>`;
+      outEl.textContent = j.output || '(no output)';
+    } catch (e) { /* transient */ }
+  }, 3000);
+}
+{% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{
+  "id": "45c15a9e",
+  "reason": "Bound to localhost on purpose: the dashboard must never be served as plain HTTP on the internet. Reach it through an SSH tunnel or HTTPS behind Caddy (WEB_DASHBOARD.md, Security notes).",
+  "source": null,
+  "author": "Blueangelman36",
+  "created": "2026-10-03",
+  "snippet": "host = os.environ.get(\"DASHBOARD_HOST\", \"127.0.0.1\")",
+  "anchors": {
+    "3": {
+      "version": 3,
+      "path": "webapp/app.py",
+      "scope": "",
+      "kind": "Assign",
+      "line": 586,
+      "exact": "666854b90743e9ca",
+      "shape": "ca5c3be0c5298a5a",
+      "dupes": {
+        "exact": 1,
+        "shape": 1,
+        "other_exact": 0,
+        "other_shape": 0,
+        "far_exact": 0,
+        "far_shape": 0
+      },
+      "rival": 0.48148148148148145,
+      "tokens": ["host", "=", "os", ".", "environ", ".", "get", "(", "\"DASHBOARD_HOST\"", ",", "\"127.0.0.1\"", ")"]
+    }
+  }
+}
