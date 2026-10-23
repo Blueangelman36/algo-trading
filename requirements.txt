@@ -1,6 +1,7 @@
 numpy>=1.26
 pandas>=2.0
 matplotlib>=3.7
+pillow>=13.0.0          # via matplotlib; 13.0 fixes CVE-2026-112900 and others
 yfinance>=0.2.40        # historical data for backtests
 alpaca-py>=0.20.0       # live paper trading: stocks / ETFs / options
 ib_async>=1.0.0         # live paper trading: futures / commodities (crude CL) via IBKR
