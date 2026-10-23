@@ -2,6 +2,7 @@
 # not the root requirements.txt, because it sits next to the entrypoint:
 # the demo never trades, so it skips the brokerage clients and Flask.
 streamlit>=1.50
+pillow>=13.0.0  # via streamlit; 13.0 fixes CVE-2026-112900 and others
 altair>=5
 numpy>=1.26
 pandas>=2.0
